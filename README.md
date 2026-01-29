@@ -25,7 +25,16 @@ This is a high-performance Authentication Service built with Go, PostgreSQL, and
    This will start:
    - Postgres (Database): Port 5432
    - Redis (Cache): Port 6379
-   - Auth Service: Port 8080
+   - Auth Service: Port 8888
+
+## Testing
+
+To run the unit tests:
+```bash
+make test
+# OR
+go test ./... -v
+```
 
 ## API Endpoints
 

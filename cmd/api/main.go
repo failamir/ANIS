@@ -22,8 +22,10 @@ func main() {
 	database.ConnectRedis(cfg)
 
 	// Setup Repository and Services
+	// Setup Repository and Services
 	userRepo := repository.NewUserRepository(database.DB)
-	authService := services.NewAuthService(userRepo, database.Rdb, cfg)
+	authRepo := repository.NewAuthRepository(database.Rdb)
+	authService := services.NewAuthService(userRepo, authRepo, cfg)
 	authHandler := handlers.NewAuthHandler(authService)
 
 	// Setup Router
@@ -33,8 +35,12 @@ func main() {
 	routes.SetupRoutes(r, authHandler, cfg, database.Rdb)
 
 	// Start Server
-	log.Printf("Server starting on port 8080")
-	if err := r.Run(":8080"); err != nil {
+	port := cfg.AppPort
+	if port == "" {
+		port = "8888"
+	}
+	log.Printf("Server starting on port %s", port)
+	if err := r.Run(":" + port); err != nil {
 		log.Fatalf("Failed to run server: %v", err)
 	}
 }
